@@ -1,1 +1,391 @@
-i
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How To Build A Racing Game Using HTML, CSS & JavaScript</title>
+
+<style>
+
+/* =============================
+   GLOBAL BLOG STYLES
+============================= */
+
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height:1.6;
+    background:#f4f4f4;
+    color:#333;
+}
+
+.container{
+    width:90%;
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+}
+
+h1,h2,h3{
+    color:#111;
+}
+
+code{
+    background:#eee;
+    padding:3px 6px;
+    border-radius:4px;
+}
+
+/* =============================
+   GAME STYLES
+============================= */
+
+.gameWrapper{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+}
+
+.gameArea{
+    width:400px;
+    height:600px;
+    background:#444;
+    position:relative;
+    overflow:hidden;
+    border-left:6px solid white;
+    border-right:6px solid white;
+}
+
+.score{
+    position:absolute;
+    top:10px;
+    left:10px;
+    color:white;
+    font-size:20px;
+    z-index:10;
+}
+
+.startScreen{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:black;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+    z-index:20;
+    cursor:pointer;
+}
+
+.hide{
+    display:none;
+}
+
+.car{
+    width:50px;
+    height:100px;
+    background:red;
+    position:absolute;
+    bottom:120px;
+    border-radius:8px;
+}
+
+.enemy{
+    width:50px;
+    height:100px;
+    background:blue;
+    position:absolute;
+    border-radius:8px;
+}
+
+.roadLine{
+    width:10px;
+    height:100px;
+    background:white;
+    position:absolute;
+    left:195px;
+}
+
+footer{
+    margin-top:60px;
+    padding:20px;
+    background:#111;
+    color:white;
+    text-align:center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>🏎️ Build a Complete Racing Game Using HTML, CSS & JavaScript (Step-By-Step Blog Tutorial)</h1>
+
+<p>
+Welcome to this complete, in-depth tutorial where you will learn how to build a fully functional racing game using only HTML, CSS, and JavaScript — all inside a single file.
+</p>
+
+<p>
+This guide is intentionally detailed and beginner-friendly. Even if you are new to JavaScript game development, you will understand every single step.
+</p>
+
+<h2>🚀 What You Will Build</h2>
+
+<ul>
+<li>A player-controlled car</li>
+<li>Moving road animation</li>
+<li>Enemy cars</li>
+<li>Collision detection</li>
+<li>Score tracking</li>
+<li>Game over system</li>
+<li>Increasing difficulty</li>
+</ul>
+
+<h2>🧠 Understanding the Game Concept</h2>
+
+<p>
+Before writing code, let's understand how this game works.
+The player controls a red car that can move left and right.
+Enemy cars spawn from the top and move downward.
+If the player collides with an enemy car, the game ends.
+The score increases over time.
+</p>
+
+<p>
+This game uses a technique called <strong>requestAnimationFrame</strong> which creates smooth animations in the browser.
+</p>
+
+<h2>🎮 Game Section</h2>
+
+<p>Click inside the game to start.</p>
+
+<div class="gameWrapper">
+    <div class="gameArea">
+        <div class="score">Score: 0</div>
+        <div class="startScreen">
+            <h2>Racing Game</h2>
+            <p>Click Here To Start</p>
+            <p>Use Arrow Keys To Move</p>
+        </div>
+    </div>
+</div>
+
+<h2>📚 Step 1 – Selecting Game Elements</h2>
+
+<p>
+First, we select our main HTML elements using JavaScript. This allows us to manipulate them dynamically.
+</p>
+
+<p>
+We will select:
+</p>
+
+<ul>
+<li>The score display</li>
+<li>The start screen</li>
+<li>The game area</li>
+</ul>
+
+<h2>📚 Step 2 – Player Object</h2>
+
+<p>
+We create a player object that stores:
+</p>
+
+<ul>
+<li>Speed</li>
+<li>Score</li>
+<li>Position</li>
+<li>Game state</li>
+</ul>
+
+<h2>📚 Step 3 – Keyboard Controls</h2>
+
+<p>
+We listen for keydown and keyup events.
+When arrow keys are pressed, we update a keys object.
+This lets us continuously move the car while a key is held.
+</p>
+
+<h2>📚 Step 4 – Creating Road Lines</h2>
+
+<p>
+To simulate movement, we create white dashed lines and move them downward.
+When they go off-screen, we reposition them to the top.
+</p>
+
+<h2>📚 Step 5 – Creating Enemy Cars</h2>
+
+<p>
+Enemy cars spawn at random horizontal positions.
+They move downward.
+If they pass the screen, they respawn at the top.
+</p>
+
+<h2>📚 Step 6 – Collision Detection</h2>
+
+<p>
+We use bounding box collision detection.
+If rectangles overlap, the game ends.
+</p>
+
+<h2>📚 Step 7 – Game Loop</h2>
+
+<p>
+The heart of the game is requestAnimationFrame.
+It updates:
+</p>
+
+<ul>
+<li>Road movement</li>
+<li>Enemy movement</li>
+<li>Player movement</li>
+<li>Score</li>
+</ul>
+
+<h2>🎯 Now Let's Look At The JavaScript Code</h2>
+
+</div>
+
+<script>
+
+/* =============================
+   GAME JAVASCRIPT
+============================= */
+
+const score = document.querySelector('.score');
+const startScreen = document.querySelector('.startScreen');
+const gameArea = document.querySelector('.gameArea');
+
+let player = { speed: 5, score: 0, start: false };
+let keys = { ArrowUp:false, ArrowDown:false, ArrowLeft:false, ArrowRight:false };
+
+document.addEventListener('keydown', keyDown);
+document.addEventListener('keyup', keyUp);
+startScreen.addEventListener('click', startGame);
+
+function keyDown(e){
+    keys[e.key] = true;
+}
+
+function keyUp(e){
+    keys[e.key] = false;
+}
+
+function startGame(){
+    startScreen.classList.add('hide');
+    gameArea.innerHTML = "<div class='score'>Score: 0</div>";
+    player.start = true;
+    player.score = 0;
+
+    let car = document.createElement('div');
+    car.setAttribute('class','car');
+    gameArea.appendChild(car);
+
+    player.x = car.offsetLeft;
+    player.y = car.offsetTop;
+
+    for(let i=0;i<5;i++){
+        let roadLine = document.createElement('div');
+        roadLine.setAttribute('class','roadLine');
+        roadLine.y = i * 150;
+        roadLine.style.top = roadLine.y + "px";
+        gameArea.appendChild(roadLine);
+    }
+
+    for(let i=0;i<3;i++){
+        let enemy = document.createElement('div');
+        enemy.setAttribute('class','enemy');
+        enemy.y = (i+1) * -300;
+        enemy.style.top = enemy.y + "px";
+        enemy.style.left = Math.floor(Math.random() * 350) + "px";
+        gameArea.appendChild(enemy);
+    }
+
+    window.requestAnimationFrame(playGame);
+}
+
+function moveLines(){
+    let lines = document.querySelectorAll('.roadLine');
+    lines.forEach(function(item){
+        if(item.y >= 600){
+            item.y -= 750;
+        }
+        item.y += player.speed;
+        item.style.top = item.y + "px";
+    });
+}
+
+function isCollide(a,b){
+    let aRect = a.getBoundingClientRect();
+    let bRect = b.getBoundingClientRect();
+
+    return !(
+        aRect.bottom < bRect.top ||
+        aRect.top > bRect.bottom ||
+        aRect.right < bRect.left ||
+        aRect.left > bRect.right
+    );
+}
+
+function moveEnemy(car){
+    let enemies = document.querySelectorAll('.enemy');
+    enemies.forEach(function(item){
+        if(isCollide(car,item)){
+            endGame();
+        }
+
+        if(item.y >= 600){
+            item.y = -300;
+            item.style.left = Math.floor(Math.random() * 350) + "px";
+        }
+
+        item.y += player.speed;
+        item.style.top = item.y + "px";
+    });
+}
+
+function endGame(){
+    player.start = false;
+    startScreen.classList.remove('hide');
+    startScreen.innerHTML = "<h2>Game Over</h2><p>Your Score: "+player.score+"</p><p>Click To Restart</p>";
+}
+
+function playGame(){
+    let car = document.querySelector('.car');
+
+    if(player.start){
+        moveLines();
+        moveEnemy(car);
+
+        if(keys.ArrowLeft && player.x > 0){
+            player.x -= player.speed;
+        }
+
+        if(keys.ArrowRight && player.x < (gameArea.offsetWidth - 50)){
+            player.x += player.speed;
+        }
+
+        car.style.left = player.x + "px";
+
+        player.score++;
+        document.querySelector('.score').innerText = "Score: " + player.score;
+
+        window.requestAnimationFrame(playGame);
+    }
+}
+
+</script>
+
+<footer>
+<p>🎉 Congratulations! You built a complete browser racing game in a single HTML file.</p>
+<p>Keep practicing and enhance it with sounds, images, levels, and mobile controls.</p>
+</footer>
+
+</body>
+</html>
